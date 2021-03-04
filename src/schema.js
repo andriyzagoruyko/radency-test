@@ -12,7 +12,7 @@ const schemaCreator = (data) =>
             .phone()
             .unique(data),
 
-        email: yup.string().required().unique(data),
+        email: yup.string().email().required().unique(data),
 
         age: yup.number().integer().min(21),
 
@@ -31,7 +31,7 @@ const schemaCreator = (data) =>
 
         'expiration date': yup
             .string()
-            .date_format(['MM/DD/YYYY', 'MM-DD-YYYY']),
+            .date_format(['YYYY-MM-DD', 'MM/DD/YYYY']),
 
         'has children': yup
             .string()
