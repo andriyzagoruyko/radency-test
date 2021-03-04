@@ -1,7 +1,7 @@
 import moment from 'moment';
 import * as yup from 'yup';
 
-yup.addMethod(yup.string, 'unique', function (data, message = 'sss') {
+yup.addMethod(yup.string, 'unique', function (data, message) {
     return this.test('unique', message, function (value, { parent }) {
         const { path, createError } = this;
 
