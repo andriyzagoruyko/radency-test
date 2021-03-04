@@ -90,6 +90,8 @@ const validateRow = (row, schema) => {
 
                 res.errors.push(item.path);
             });
+        } else {
+            throw e;
         }
     }
 

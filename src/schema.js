@@ -14,13 +14,19 @@ const schemaCreator = (data) =>
 
         email: yup.string().email().required().unique(data),
 
-        age: yup.number().integer().min(21),
+        age: yup
+            .number()
+            .integer()
+            .min(21)
+            .transform((val) => (!val ? 0 : val)),
 
         experience: yup
             .number()
             .integer()
             .positive()
-            .test((val, { parent }) => val < parent.age),
+            .test(
+                (val, { parent }) => !parent.age || val < parent.age,
+            ),
 
         'yearly income': yup
             .string()
