@@ -27,7 +27,7 @@ const schemaCreator = (data) =>
             .test((val) => !!parseInt(val) && val <= 1000000)
             .transform((val) => (+val).toFixed(2)),
 
-        'license states': yup.string(),
+        'license states': yup.string().transform_states(),
 
         'expiration date': yup
             .string()

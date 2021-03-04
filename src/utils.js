@@ -66,7 +66,7 @@ yup.addMethod(yup.string, 'transform_states', function (length = 2) {
             val.trim().substr(0, length).toUpperCase(),
         );
 
-        return shrinked.join(',');
+        return shrinked.join(', ');
     });
 });
 
