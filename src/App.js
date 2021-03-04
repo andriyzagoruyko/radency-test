@@ -4,8 +4,8 @@ import schemaCreator from './schema';
 import { prepareData, validateData } from './utils';
 import Table from './components/Table/Table';
 import Upload from './components/Upload/Upload';
-import './index.css';
 import HandleError from './components/HandleError/HandleError';
+import './index.css';
 
 const parseConfig = {
     header: true,
@@ -26,11 +26,9 @@ function App() {
             const { fields } = results.meta;
             const prepared = prepareData(results.data, schemaCreator);
             const rows = validateData(prepared);
-
             setData({ fields, rows, isError: false });
         } catch (e) {
             const isError = e.name === 'ValidationError';
-
             setData({ ...data, isError });
         }
     }
@@ -43,9 +41,11 @@ function App() {
             });
         }
 
-        const isError = file && !isValid;
-
-        setData({ ...data, rows: !file ? [] : data.rows, isError });
+        setData({
+            ...data,
+            rows: !file ? [] : data.rows,
+            isError: file && !isValid,
+        });
     }
 
     return (

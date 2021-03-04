@@ -7,7 +7,6 @@ function Upload({ onChange, extension }) {
 
     const addFile = (file) => {
         const isValid = file && file.name.endsWith(extension);
-
         onChange(file || null, isValid);
         setFileName(isValid ? file.name : null);
     };
