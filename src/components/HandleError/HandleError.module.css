@@ -1,0 +1,14 @@
+.container {
+  background-color: rgb(236, 236, 236);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.container svg {
+  width: 100px;
+  padding: 30px;
+}
