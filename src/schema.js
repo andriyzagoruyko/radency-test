@@ -1,5 +1,7 @@
 import * as yup from 'yup';
 
+const fileRequiredFields = ['full name', 'phone', 'email'];
+
 const schemaCreator = (data) =>
     yup.object({
         'full name': yup.string().required(),
@@ -50,4 +52,5 @@ const schemaCreator = (data) =>
             .matches(/^[a-zA-Z0-9]+$/),
     });
 
+export { fileRequiredFields };
 export default schemaCreator;

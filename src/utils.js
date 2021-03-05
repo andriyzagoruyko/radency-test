@@ -30,12 +30,10 @@ yup.addMethod(yup.string, 'date_format', function (formats, message) {
             const { createError } = this;
 
             const date = moment(originalValue, formats, true);
+            const isValid =
+                date.isValid() && !date.isSameOrBefore(new Date());
 
-            return (
-                (date.isValid() &&
-                    !date.isSameOrBefore(new Date())) ||
-                createError()
-            );
+            return isValid || createError();
         },
     );
 });
@@ -61,7 +59,6 @@ yup.addMethod(yup.string, 'transform_phone', function () {
 yup.addMethod(yup.string, 'transform_states', function (length = 2) {
     return this.transform(function (value) {
         const array = value.split('|');
-
         const shrinked = array.map((val) =>
             val.trim().substr(0, length).toUpperCase(),
         );
@@ -80,15 +77,11 @@ const validateRow = (row, schema) => {
     } catch (e) {
         if (e.name === 'ValidationError') {
             e.inner.forEach((item) => {
-                if (item.type === 'required') {
-                    throw item;
-                }
+                res.errors.push(item.path);
 
                 if (item.params.duplicateId) {
                     res.duplicateId = item.params.duplicateId;
                 }
-
-                res.errors.push(item.path);
             });
         } else {
             throw e;

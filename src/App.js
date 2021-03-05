@@ -1,18 +1,11 @@
 import React, { useState } from 'react';
-import Papa from 'papaparse';
-import schemaCreator from './schema';
+import schemaCreator, { fileRequiredFields } from './schema';
 import { prepareData, validateData } from './utils';
 import Table from './components/Table/Table';
 import Upload from './components/Upload/Upload';
 import HandleError from './components/HandleError/HandleError';
+import useParser from './hooks/useParser';
 import './index.css';
-
-const parseConfig = {
-    header: true,
-    skipEmptyLines: true,
-    transformHeader: (val) => val.trim().toLowerCase(),
-    transform: (val) => val.trim(),
-};
 
 function App() {
     const [data, setData] = useState({
@@ -21,31 +14,27 @@ function App() {
         isError: false,
     });
 
-    function handleParseComplete(results) {
-        try {
-            const { fields } = results.meta;
-            const prepared = prepareData(results.data, schemaCreator);
-            const rows = validateData(prepared);
-            setData({ fields, rows, isError: false });
-        } catch (e) {
-            const isError = e.name === 'ValidationError';
-            setData({ ...data, isError });
+    const parseFile = useParser((results, fields, error) => {
+        if (error) {
+            setData({ ...data, isError: true });
+            return;
         }
-    }
+
+        const prepared = prepareData(results.data, schemaCreator);
+        const rows = validateData(prepared);
+
+        setData({ fields, rows, isError: false });
+    }, fileRequiredFields);
 
     function handleChangeUpload(file, isValid) {
         if (file && isValid) {
-            Papa.parse(file, {
-                ...parseConfig,
-                complete: handleParseComplete,
-            });
+            parseFile(file);
         }
 
-        setData({
-            ...data,
-            rows: !file ? [] : data.rows,
-            isError: file && !isValid,
-        });
+        const rows = !file ? [] : data.rows;
+        const isError = file && !isValid;
+
+        setData({ ...data, rows, isError });
     }
 
     return (
